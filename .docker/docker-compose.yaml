@@ -1,0 +1,42 @@
+version: '3.6'
+services:
+  db:
+    container_name: postgres
+    image: 'postgres:14-alpine'
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: ${PG_PASS:-postgres}
+      POSTGRES_USER: ${PG_USER:-postgres}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data'
+    networks:
+      - db-network
+  web:
+    container_name: elixir
+    image: bitwalker/alpine-elixir-phoenix:latest
+    command: tail -f /dev/null
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - '4000:4000'
+    volumes:
+      - ../:/app
+    networks:
+      - web-network
+      - db-network
+
+volumes:
+  pgdata:
+
+
+networks:
+  db-network: {}
+  web-network: {}
