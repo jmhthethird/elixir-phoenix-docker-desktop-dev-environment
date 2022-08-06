@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   db:
-    container_name: postgres
+    # container_name: postgres
     image: 'postgres:14-alpine'
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -18,7 +18,7 @@ services:
     networks:
       - db-network
   web:
-    container_name: elixir
+    # container_name: elixir
     image: bitwalker/alpine-elixir-phoenix:latest
     command: tail -f /dev/null
     depends_on:
